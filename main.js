@@ -130,8 +130,7 @@ console.log( 'The total number of transactions is:', totalTransactions );
   HINT(S):
   - Not all transactions are 'sales'.
 */
-var numSales;
-
+var numSales = transactions.filter(transaction => transaction.type === 'sale').length
 /*
   Hey, welcome to the first question!
 
@@ -160,7 +159,7 @@ console.log( 'The total number of sales is:', numSales );
 /*
   Calculate the total number of 'purchases'.
 */
-var numPurchases;
+var numPurchases = transactions.filter(transaction => transaction.type === 'purchase').length;
 
 console.log( 'The total number of purchases is:', numPurchases );
 
@@ -174,7 +173,7 @@ console.log( 'The total number of purchases is:', numPurchases );
   HINT(S):
   - Don't forget that 'purchases' can also be made in 'cash'!
 */
-var numCashSales;
+var numCashSales = transactions.filter(transaction => transaction.paymentMethod === 'cash' && transaction.type === 'sale').length;
 
 console.log( 'The total number of cash sales is:', numCashSales );
 
@@ -188,7 +187,7 @@ console.log( 'The total number of cash sales is:', numCashSales );
   HINT(S):
   - Make sure to exclude any 'sales' made by 'credit'!
 */
-var numCreditPurchases;
+var numCreditPurchases = transactions.filter(transaction => transaction.paymentMethod === 'credit' && transaction.type === 'purchase').length;;
 
 console.log( 'The total number of credit purchases is:', numCreditPurchases );
 
@@ -205,7 +204,8 @@ console.log( 'The total number of credit purchases is:', numCreditPurchases );
   - The assembled array should be made up of strings, not full `transaction` objects.
   - This array is allowed to contain duplicate values.
 */
-var allVendors;
+var allVendors = transactions.filter(transaction => transaction.vendor != undefined).map(transaction => transaction.vendor);
+
 
 console.log( 'The vendors are:', allVendors );
 
@@ -222,7 +222,13 @@ console.log( 'The vendors are:', allVendors );
   - The assembled array should be made up of strings, not full `transaction` objects.
   - Make sure that the resulting array *does not* include any duplicates.
 */
-var uniqueCustomers;
+var uniqueCustomers = transactions.filter(transaction => transaction.customer != undefined).map(transaction => transaction.customer).reduce(function(accu, value){
+  if(!accu.includes(value)){
+    accu.push(value)
+  } return accu
+  },
+  []
+);
 
 console.log( 'The unique customers are:', uniqueCustomers );
 
@@ -240,7 +246,12 @@ console.log( 'The unique customers are:', uniqueCustomers );
   - There may be more than 1 'sale' that includes 5 or more items.
   - Individual transactions do not have either `name` or `numItems` properties, we'll have to add them to the output.
 */
-var bigSpenders;
+var bigSpenders = transactions.filter(transaction => transaction.type === 'sale' && transaction.items.length >= 5 ).map(function(transaction){
+  return {
+    name: transaction.customer, numitems: transaction.items.length
+    }
+  }
+);
 
 console.log( 'The "big spenders" are:', bigSpenders );
 
@@ -254,7 +265,15 @@ console.log( 'The "big spenders" are:', bigSpenders );
   HINT(S):
   - Transactions don't have 'prices', but their 'items' do!
 */
-var sumSales;
+var sumSales = transactions.filter(transaction => transaction.type === 'sale')[0].items.map(function(item){
+  return item.price }
+).reduce(function(accu,value){
+  accu += value
+  return accu
+  },
+  0
+  )
+
 
 console.log( 'The sum of all sales is:', sumSales );
 
@@ -270,9 +289,26 @@ console.log( 'The sum of all sales is:', sumSales );
   - Make sure to include 'price' information from *all* purchases.
 */
 
-var sumPurchases;
+var sumPurchases = transactions.filter(transaction => transaction.type === 'purchase').map(function(transaction){
+  return transaction.items}
+).map(function(items_list){
+  return items_list.map(function(item){
+    return item.price})
+  }
+).reduce(function(accu,value){
+  accu = accu.concat(value)
+  return accu
+},
+[]
+).reduce(function(accu,value){
+  accu += value
+  return accu
+},
+0
+)
 
-console.log( 'The sum of all purhcases is:', sumPurchases );
+
+console.log( 'The sum of all purchases is:', sumPurchases);
 
 
 // --------------------------------------------------
