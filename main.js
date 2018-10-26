@@ -265,17 +265,37 @@ console.log( 'The "big spenders" are:', bigSpenders );
   HINT(S):
   - Transactions don't have 'prices', but their 'items' do!
 */
-var sumSales = transactions.filter(transaction => transaction.type === 'sale')[0].items.map(function(item){
-  return item.price }
-).reduce(function(accu,value){
-  accu += value
-  return accu
+// var sumSales1 = transactions.filter(transaction => transaction.type === 'sale')[0].items.map(function(item){
+//   return item.price }
+// ).reduce(function(accu,value){
+//   accu += value
+//   return accu
+//   },
+//   0
+//   )
+
+  var sumSales = transactions.filter(transaction => transaction.type === 'sale').map(function(transaction){
+    return transaction.items}
+  ).map(function(items_list){
+    return items_list.map(function(item){
+      return item.price})
+    }
+  ).reduce(function(accu,value){
+    accu = accu.concat(value)
+    return accu
+  },
+  []
+  ).reduce(function(accu,value){
+    accu += value
+    return accu
   },
   0
   )
 
 
 console.log( 'The sum of all sales is:', sumSales );
+
+
 
 
 // --------------------------------------------------
@@ -324,7 +344,7 @@ console.log( 'The sum of all purchases is:', sumPurchases);
   HINT(S):
   - Unlike 'QUESTION 08' and 'QUESTION 09', here we're interested in both 'sale' and 'purchase' transactions.
 */
-var netProfit;
+var netProfit = sumSales + sumPurchases ;
 
 console.log( 'The net profit is:', netProfit );
 
@@ -338,8 +358,17 @@ console.log( 'The net profit is:', netProfit );
   HINTS:
   - The result of this calculation should be a number (not an array, object, or other data type).
 */
-var mostItems;
+var mostItems = findMostItems(bigSpenders)
 
+function findMostItems(bigspenders){
+  var max = 0;
+  for (var i = 0; i < bigspenders.length; i++){
+  if (bigspenders[i].numitems > max){
+    max = bigspenders[i].numitems
+  }
+  return max
+  }
+}
 console.log( 'The most items sold in a single transaction is:', mostItems );
 
 
@@ -349,6 +378,11 @@ console.log( 'The most items sold in a single transaction is:', mostItems );
 /*
   Calculate the sum of the 'purchase' with the fewest items.
 */
-var sumOfSmallestPurchase;
+var sumOfSmallestPurchase = findSamllestItems(transactions);
+
+function findFewestItemPurchase(transactions){
+  return transactions.filter(transaction => transaction.type === 'purchase').
+}
+function findSmallestPurchase(findFewestItemPurchase)
 
 console.log( 'The sum of the smallest purchase is:', sumOfSmallestPurchase );
